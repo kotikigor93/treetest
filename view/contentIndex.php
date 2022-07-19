@@ -5,4 +5,4 @@
  * Time : 18:19
  */
 
-echo 'CONTENT';
+echo 'MAIN CONTENT';

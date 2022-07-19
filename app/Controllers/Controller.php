@@ -7,14 +7,12 @@
 
 namespace app\Controllers;
 
+use components\SRC;
+
 abstract class Controller
 {
     protected function viewLoad($filename = 'index', $data = null)
     {
-        if(file_exists(ROOT.'/view/content'.$filename.'.php')){
-            require_once ROOT.'/view/content'.$filename.'.php';
-            return;
-        }
-        require_once ROOT.'/view/contentIndex.php';
+        SRC::template($filename, $data);
     }
 }

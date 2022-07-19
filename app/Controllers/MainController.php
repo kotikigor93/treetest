@@ -11,7 +11,7 @@ class MainController extends Controller
 {
     public function actionIndex()
     {
-        $this->viewLoad('index', ['index' => 1]);
+        $this->viewLoad('index', ['test_data' => 1]);
     }
 
     public function actionError()
