@@ -11,11 +11,16 @@ class MainController extends Controller
 {
     public function actionIndex()
     {
-        $this->viewLoad('index', ['test_data' => 1]);
+        $this->viewLoad('index', [
+            'view_title' => 'Home Page',
+            'test_data' => 1,
+        ]);
     }
 
     public function actionError()
     {
-        $this->viewLoad('error');
+        $this->viewLoad('error',[
+            'view_title' => 'Error 404',
+        ]);
     }
 }

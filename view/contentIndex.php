@@ -5,4 +5,16 @@
  * Time : 18:19
  */
 
-echo 'MAIN CONTENT';
+require_once $data['view_header'];
+
+?>
+
+content
+<script>
+    $(document).ready(function (){
+        console.log(1);
+    })
+</script>
+<?php
+require_once $data['view_footer'];
+?>
