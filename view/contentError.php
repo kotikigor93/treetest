@@ -5,7 +5,7 @@
  * Time : 18:21
  */
 
-require_once $data['view_header'];
+require_once 'view/header.php';
 ?>
 
 <div class="content">
@@ -37,5 +37,5 @@ require_once $data['view_header'];
 </style>
 
 <?php
-require_once $data['view_footer'];
+require_once 'view/footer.php';
 ?>

@@ -9,6 +9,9 @@ namespace components;
 
 class Autoloader
 {
+    /**
+     * @param $class
+     */
     public function loadClass($class)
     {
         $rootDir =ROOT. '/';

@@ -11,6 +11,9 @@ use app\Controllers\MainController;
 
 class Route
 {
+    /**
+     * @return string
+     */
     private function getURI():string
     {
         $uri = $_SERVER['REQUEST_URI'];
@@ -18,6 +21,7 @@ class Route
             return trim($uri, '/');
         }
     }
+
 
     public function run()
     {
