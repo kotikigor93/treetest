@@ -17,9 +17,16 @@ class TreeController extends Controller
     public function actionMain()
     {
         $application = new TreeApplication();
-        $list = $application->getTreeList();
-        $this->ajax([
-            'list' => $list,
+        echo $this->ajax([
+            'id' => $application->addTreeBranches(['title' => 'root', 'parent' => 0])
+        ]);
+    }
+
+    public function actionAddNewBranches()
+    {
+        $application = new TreeApplication();
+        echo $this->ajax([
+            'id' => $application->addTreeBranches(['title' => $_POST['title'], 'parent' => $_POST['parent']])
         ]);
     }
 }

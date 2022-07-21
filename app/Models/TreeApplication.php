@@ -22,4 +22,15 @@ class TreeApplication extends ExpandetModel
         $this->setSort('ASC');
         return $this->init()->getData();
     }
+
+    /**
+     * @param array $insertData
+     * @return int
+     */
+    public function addTreeBranches(array $insertData):int
+    {
+        $this->setMainTable('tree');
+        $this->setInsertData($insertData);
+        return $this->insertTableRow();
+    }
 }

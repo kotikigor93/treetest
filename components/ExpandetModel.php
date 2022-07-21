@@ -31,6 +31,21 @@ abstract class ExpandetModel
      */
     private $sort = 'DESC';
 
+    /**
+     * @var string
+     */
+    private $params = '';
+
+    /**
+     * @var string
+     */
+    private $value = '';
+
+    /**
+     * @var array
+     */
+    private $insertData = [];
+
 
     /**
      * @return $this
@@ -74,6 +89,16 @@ abstract class ExpandetModel
     }
 
     /**
+     * @param array $insertData
+     */
+    public function setInsertData(array $insertData): void
+    {
+        $this->insertData = $insertData;
+    }
+
+
+
+    /**
      * @return array
      */
     protected function getCurrentTableRow(): array
@@ -82,5 +107,21 @@ abstract class ExpandetModel
         $result = $db->query('SELECT * FROM '.$this->mainTable.' ORDER BY '.$this->orderBy.' '.$this->sort);
         $result->setFetchMode(PDO::FETCH_ASSOC);
         return $result->fetchAll();
+    }
+
+    /**
+     * @return int
+     */
+    protected function insertTableRow():int
+    {
+        foreach ($this->insertData as $key => $val){
+            $this->params .= $key.',';
+            $this->value .= "'".$val."',";
+        }
+        $this->params = substr($this->params, 0, -1);
+        $this->value = substr($this->value, 0, -1);
+        $db = new DB();
+        $db->query('INSERT INTO '.$this->mainTable.' ('.$this->params.') VALUES ('.$this->value.')');
+        return $db->lastInsertId();
     }
 }
