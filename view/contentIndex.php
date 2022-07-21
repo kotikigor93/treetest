@@ -24,12 +24,30 @@ require_once 'view/header.php';
         </div>
     </div>
 </div>
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete branches ID - <span class="branch_id"></span>?</h5>
+                    <button type="button" class="close_delete" data-dismiss="modal" aria-hidden="true">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <div class="timer btn btn-primary">30</div>
+                    <a type="button" class="btn btn-success close_delete" data-dismiss="modal" aria-hidden="true">Close</a>
+                    <button type="button" class="btn btn-danger apply_delete">Deleted</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <script>
 
     let contentHtml = '';
     let nextLvl = true;
     let appendHtml = '';
     let allParents = [];
+    let delModal = $('#deleteModal');
 
     $('#create_root').click(function (){
         $.ajax({
@@ -104,10 +122,11 @@ require_once 'view/header.php';
     $('.list-group').on('click', '.list-group-item p .add_branches',function (e){
         e.stopPropagation();
         let parent = $(this).data('branchesid');
+        let thisBrances =$(this).parent();
         let title = '123';
-        let appendid = 0;
         let style = '';
         let newParent = '';
+        let lastId
         $.ajax({
             url: 'addnewbranches',
             method: 'POST',
@@ -116,22 +135,80 @@ require_once 'view/header.php';
                 title: title
             },
             success: function (result){
-                let lastId = $.parseJSON(result);
-                appendid = lastId.id;
+                lastId = $.parseJSON(result);
+                if(thisBrances.parent().hasClass('closed')){
+                    style = 'style="height: 0px;"';
+                }
+                appendHtml += '<div class="list-group-item" '+style+'>';
+                appendHtml += '<p>'+title+'<span class="add_branches" data-branchesid='+lastId.id+'>+</span><span class="remove_branches" data-branchesid='+lastId.id+'>-</span></p>';
+                appendHtml += '</div>';
+                thisBrances.parent().append(appendHtml);
+                if(!thisBrances.find('span').hasClass('arrow')){
+                    newParent = '<span class="arrow">&darr;</span>'+thisBrances.html();
+                    thisBrances.html(newParent);
+                }
+                appendHtml = '';
             }
         });
-        if($(this).parent().parent().hasClass('closed')){
-            style = 'style="height: 0px;"';
-        }
-        appendHtml += '<div class="list-group-item" '+style+'>';
-        appendHtml += '<p>'+title+'<span class="add_branches" data-branchesid='+appendid+'>+</span><span class="remove_branches" data-branchesid='+appendid+'>-</span></p>';
-        appendHtml += '</div>';
-        $(this).parent().parent().append(appendHtml);
-        if(!$(this).parent().find('span').hasClass('arrow')){
-            newParent = '<span class="arrow">&darr;</span>'+$(this).parent().html();
-            $(this).parent().html(newParent);
-        }
-        appendHtml = '';
+    });
+
+    $('body').on('click', '.close_delete', function (){
+        $('.clicked').removeClass('clicked');
+        delModal.modal('hide');
+        $('.timer').text(30);
+    });
+
+    function startTimer(){
+        let seconds = 30;
+        let int;
+        int = setInterval(function() {
+            if (seconds > 0) {
+                if(delModal.is(':visible')){
+                    seconds--;
+                    $('.timer').text(seconds);
+                } else {
+                    clearInterval(int);
+                    seconds = 30;
+                }
+            } else {
+                clearInterval(int);
+                seconds = 30;
+                delModal.modal('hide');
+                $('.clicked').removeClass('clicked');
+            }
+        }, 1000);
+    }
+
+    $('.list-group').on('click', '.list-group-item p .remove_branches',function (e) {
+        e.stopPropagation();
+        $(this).parent().parent().addClass('clicked');
+        delModal.find('.branch_id').text($(this).data('branchesid'));
+        delModal.find('.apply_delete').attr('data-delete', $(this).data('branchesid'));
+        delModal.modal('show');
+        startTimer();
+    });
+
+    $('body').on('click','.apply_delete', function(e){
+        e.stopPropagation();
+        let id = $(this).data('delete');
+        $.ajax({
+            url: 'delnewbranches',
+            method: 'POST',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                let delResult = $.parseJSON(result);
+                if(delResult.result){
+                    delModal.modal('hide');
+                    let old = $('.clicked').parent();
+                    $('.clicked').remove();
+                    if(old.find('div').length === 0){
+                        old.find('.arrow').remove();
+                    }
+                }
+            }
+        });
     });
 
     $('.list-group').on('click','.list-group-item p', function(e){

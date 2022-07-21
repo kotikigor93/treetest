@@ -29,4 +29,12 @@ class TreeController extends Controller
             'id' => $application->addTreeBranches(['title' => $_POST['title'], 'parent' => $_POST['parent']])
         ]);
     }
+
+    public function actionDelBranches()
+    {
+        $application = new TreeApplication();
+        echo $this->ajax([
+            'result' => $application->delTreeBranches((int)$_POST['id'])
+        ]);
+    }
 }

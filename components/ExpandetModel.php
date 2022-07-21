@@ -17,6 +17,11 @@ abstract class ExpandetModel
     private $data = [];
 
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var string
      */
     private $mainTable = 'tree';
@@ -81,14 +86,6 @@ abstract class ExpandetModel
     }
 
     /**
-     * @return array
-     */
-    public function getData():array
-    {
-        return $this->data;
-    }
-
-    /**
      * @param array $insertData
      */
     public function setInsertData(array $insertData): void
@@ -96,7 +93,22 @@ abstract class ExpandetModel
         $this->insertData = $insertData;
     }
 
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
+
+    /**
+     * @return array
+     */
+    public function getData():array
+    {
+        return $this->data;
+    }
 
     /**
      * @return array
@@ -123,5 +135,11 @@ abstract class ExpandetModel
         $db = new DB();
         $db->query('INSERT INTO '.$this->mainTable.' ('.$this->params.') VALUES ('.$this->value.')');
         return $db->lastInsertId();
+    }
+
+    protected function delTableRowById():bool
+    {
+        $db = new DB();
+        return (bool)$db->query('DELETE FROM ' . $this->mainTable . ' WHERE id =' . $this->id . ' OR parent =' . $this->id);
     }
 }
