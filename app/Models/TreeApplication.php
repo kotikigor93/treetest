@@ -34,6 +34,10 @@ class TreeApplication extends ExpandetModel
         return $this->insertTableRow();
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function delTreeBranches(int $id):bool
     {
         $this->setMainTable('tree');
