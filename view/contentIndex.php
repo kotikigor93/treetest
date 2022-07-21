@@ -123,7 +123,7 @@ require_once 'view/header.php';
         e.stopPropagation();
         let parent = $(this).data('branchesid');
         let thisBrances =$(this).parent();
-        let title = '123';
+        let title = 'New Branches';
         let style = '';
         let newParent = '';
         let lastId
