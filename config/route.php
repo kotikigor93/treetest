@@ -12,6 +12,6 @@ $routes = [
     'error' => 'main/error',
     'getbrancheslist' => 'main/brancheslist',
     'addnewbranches' => 'tree/addnewbranches',
-    'delnewbranches' => 'tree/delbranches',
+    'delbranches' => 'tree/delbranches',
     'create/main' => 'tree/main'
 ];

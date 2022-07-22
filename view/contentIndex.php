@@ -192,7 +192,7 @@ require_once 'view/header.php';
         e.stopPropagation();
         let id = $(this).data('delete');
         $.ajax({
-            url: 'delnewbranches',
+            url: 'delbranches',
             method: 'POST',
             data: {
                 id: id
